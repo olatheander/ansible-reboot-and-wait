@@ -1,0 +1,5 @@
+---
+
+delegate_to_host: 127.0.0.1
+do_reboot: true
+do_wait: true

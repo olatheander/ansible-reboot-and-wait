@@ -1,0 +1,24 @@
+---
+
+#
+# Reboot & wait derived from code written by Martin Eggen.
+# https://github.com/ansible/ansible/issues/14413#issuecomment-257887580
+# 
+
+- name: Reboot host
+  shell: sleep 2 && shutdown -r now "Ansible reboot"
+  async: 1
+  poll: 0
+  ignore_errors: yes
+  when: do_reboot
+
+- name: waiting for node(s) to come online
+  wait_for:
+    host="{{ inventory_hostname }}"
+    port=22
+    delay=20
+    timeout=360
+    state=started
+  delegate_to: "{{ delegate_to_host }}"
+  when: do_wait
+
